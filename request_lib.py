@@ -1,3 +1,5 @@
+import copy
+
 import requests
 import json
 
@@ -127,11 +129,14 @@ def get_bu_disk_used_size(host_hostid_dict):
     return hosts_bu_disk_used_size
 
 
-def get_bu_disk_free_size(bu_disk_size, bu_disk_used_size):
+def get_bu_disk_free_size(bu_disk_size, bu_disk_used_size, server_name):
     bu_disk_free_size = {}
-    for server_name in host_name_and_bu_disks:
-        disk_free_size = bu_disk_size[server_name] - bu_disk_used_size[server_name]
-        bu_disk_free_size[server_name] = round(disk_free_size, 2)
+    disk_free_size = bu_disk_size - bu_disk_used_size
+    bu_disk_free_size['disk_free_size'] = round(disk_free_size, 2)
+    disk_free_size_p = (disk_free_size/bu_disk_size)*100
+    bu_disk_free_size["disk_free_size_p"] = round(disk_free_size_p, 2)
+    bu_disk_free_size["server_name"] = server_name
+
     return bu_disk_free_size
 
 
